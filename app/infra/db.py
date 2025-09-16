@@ -85,3 +85,13 @@ class JSONDatabase:
         data["bookings"].append(booking)
         self._write_data(data)
         logger.info(f"New booking added: {booking.get('id', 'unknown')}")
+
+
+    def set_status_car(self, car_id: UUID, status: CarStatus) -> None:
+        data = self._read_data()
+        for car in data.get("cars", []):
+            if car['id'] == str(car_id):
+                car['status'] = status.value
+                self._write_data(data)
+                logger.info(f"Car {car_id} status updated to {status.value}")
+                return

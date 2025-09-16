@@ -89,7 +89,9 @@ class CarRentalService:
 
 
     def is_car_available_for_dates(self, car_id: UUID, start_date: date, end_date: date) -> bool:
-        """Checks if a car is available for a specific date range."""
+        """
+        Checks if a car is available for a specific date range.
+        """
         logger.info(f"Checking availability for car {car_id} from {start_date} to {end_date}")
         
         if not self.is_car_available(car_id):
@@ -103,7 +105,7 @@ class CarRentalService:
                 logger.error(f"Invalid booking data: {booking}, type: {type(booking)}")
                 continue
                 
-            if booking['car_id'] == car_id:
+            if booking['car_id'] == str(car_id):
                 existing_start = date.fromisoformat(
                     booking['start_date']
                 ) if isinstance(booking['start_date'], str) else booking['start_date']
@@ -153,7 +155,7 @@ class CarRentalService:
             
             logger.info(f"Booking created successfully with ID: {booking_data['id']}")
 
-            # self.db.set_status_car(booking_request.car_id, CarStatus.RESERVED)
+            self.db.set_status_car(booking_request.car_id, CarStatus.RESERVED)
             return booking_data
             
         except (CarNotAvailableError, InvalidDateRangeError) as e:
