@@ -34,7 +34,7 @@ C:.
 ## Usage Instructions
 
 ```bash
-git clone https://github.com/blasd/bookline.git
+git clone https://github.com/david-blg/bookline-tech-test
 cd bookline
 docker build -t car-rental-api .
 docker run -p 8000:8000 -v ${PWD}:/app --name car-api car-rental-api
