@@ -1,6 +1,8 @@
-from pathlib import Path
-from uuid import uuid4
 import json
+from app.core.logger.setup_logger import logger
+from pathlib import Path
+from typing import Dict, List, Any
+from uuid import uuid4, UUID
 
 class JSONDatabase:
     def __init__(self, file_path: str = "app/data/db.json"):
@@ -10,7 +12,6 @@ class JSONDatabase:
 
     def _ensure_file_exists(self):
         """Create a new file if it doesn't exist"""
-
         if not self.file_path.exists():
             initial_data = {
                 "cars": [
@@ -21,7 +22,7 @@ class JSONDatabase:
                         "engine": "JZX100 1JZ-GTE",
                         "version": "Tourer V",
                         "year": "1998",
-                        "status": "available(enum here)"
+                        "status": "available"
                     },
                     {
                         "id": uuid4(),
@@ -30,7 +31,7 @@ class JSONDatabase:
                         "engine": "2JZ-GTE",
                         "version": "MK4",
                         "year": "1996",
-                        "status": "available(enum here)"
+                        "status": "available"
                     },
                     {
                         "id": uuid4(),
@@ -39,37 +40,34 @@ class JSONDatabase:
                         "engine": "S54B32",
                         "version": "E46",
                         "year": 2003,
-                        "status": "maintenance(enum here)"
+                        "status": "maintenance"
                     }
                 ],
                 "bookings": []
             }
-            self.file_path.write_text(json.dumps(initial_data))
-            print("Database file created successfully")
+            self._write_data(initial_data)
+            logger.info(f"Created new database file at {self.file_path}")
 
-        def _read_data(self):
-            try:
-                if not self.file_path.exists():
-                    return None
-                with open(self.file_path, "r") as f:
-                    return json.load(f)
-            except Exception as e:
-                print(f"Error reading data from file: {e}")
-                return None
+    def _read_data(self) -> Dict[str, List[Any]]:
+        try:
+            with open(self.file_path, 'r') as file:
+                return json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            logger.error(f"Error reading database file: {e}. Returning empty data.")
+            return {"cars": [], "bookings": []}
 
-        def _write_data(self, data):
-            try:
-                with open(self.file_path, "w") as f:
-                    json.dump(data, f, indent=4)
-            except Exception as e:
-                print(f"Error writing data to file: {e}")
+    def _write_data(self, data: Dict[str, List[Any]]):
+        try:
+            with open(self.file_path, 'w') as file:
+                json.dump(data, file, indent=4, default=str)
+        except Exception as e:
+            logger.error(f"Error writing to database file: {e}")
+            raise
 
-
-        def get_all_cars(self):
-            data = self._read_data()
-            return data.get("cars", [])
-
-
-        def get_all_bookings(self):
-            data = self._read_data()
-            return data.get("bookings", [])
+    def get_all_cars(self) -> List[Dict]:
+        data = self._read_data()
+        return data.get("cars", [])
+    
+    def get_all_bookings(self):
+        data = self._read_data()
+        return data.get("bookings", [])
