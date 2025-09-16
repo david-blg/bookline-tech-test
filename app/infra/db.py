@@ -3,6 +3,7 @@ from app.core.logger.setup_logger import logger
 from pathlib import Path
 from typing import Dict, List, Any
 from uuid import uuid4, UUID
+from app.core.models.car_model import CarStatus
 
 class JSONDatabase:
     def __init__(self, file_path: str = "app/data/db.json"):
@@ -22,7 +23,7 @@ class JSONDatabase:
                         "engine": "JZX100 1JZ-GTE",
                         "version": "Tourer V",
                         "year": "1998",
-                        "status": "available"
+                        "status": CarStatus.AVAILABLE
                     },
                     {
                         "id": uuid4(),
@@ -31,7 +32,7 @@ class JSONDatabase:
                         "engine": "2JZ-GTE",
                         "version": "MK4",
                         "year": "1996",
-                        "status": "available"
+                        "status": CarStatus.AVAILABLE
                     },
                     {
                         "id": uuid4(),
@@ -40,7 +41,7 @@ class JSONDatabase:
                         "engine": "S54B32",
                         "version": "E46",
                         "year": 2003,
-                        "status": "maintenance"
+                        "status": CarStatus.MAINTENANCE
                     }
                 ],
                 "bookings": []
@@ -68,6 +69,15 @@ class JSONDatabase:
         data = self._read_data()
         return data.get("cars", [])
     
+    def get_car_by_id(self, car_id: UUID) -> Dict:
+        cars = self._read_data()
+        for car in cars:
+            if car['id'] == str(car_id):
+                return car
+        return None
+    
     def get_all_bookings(self):
-        data = self._read_data()
-        return data.get("bookings", [])
+        bookings = self._read_data()
+        return bookings.get("bookings", [])
+
+    

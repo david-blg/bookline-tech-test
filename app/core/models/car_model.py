@@ -1,5 +1,11 @@
 from uuid import UUID
 from pydantic import BaseModel, ConfigDict
+from enum import Enum
+
+class CarStatus(str, Enum):
+    AVAILABLE = "available"
+    RESERVED = "reserved"
+    MAINTENANCE = "maintenance"
 
 
 class Car(BaseModel):
@@ -9,6 +15,6 @@ class Car(BaseModel):
     engine: str
     version: str
     year: int
-    status: str
+    status: CarStatus = CarStatus.AVAILABLE
 
     model_config = ConfigDict(from_attributes=True)
