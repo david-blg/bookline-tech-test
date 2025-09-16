@@ -1,6 +1,6 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict, field_validator
 from uuid import UUID
-from datetime import date
+from datetime import date, datetime
 
 
 class BaseBooking(BaseModel):
@@ -10,3 +10,7 @@ class BaseBooking(BaseModel):
     customer_email: EmailStr
     start_date: date
     end_date: date
+
+class BookingRequest(BaseBooking):
+    """Booking request model."""
+    pass

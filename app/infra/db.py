@@ -70,14 +70,18 @@ class JSONDatabase:
         return data.get("cars", [])
     
     def get_car_by_id(self, car_id: UUID) -> Dict:
-        cars = self._read_data()
-        for car in cars:
+        data = self._read_data()
+        for car in data.get("cars", []):
             if car['id'] == str(car_id):
                 return car
         return None
     
-    def get_all_bookings(self):
-        bookings = self._read_data()
-        return bookings.get("bookings", [])
+    def get_all_bookings(self) -> List[Dict]:
+        data = self._read_data()
+        return data.get("bookings", [])
 
-    
+    def add_booking(self, booking: Dict) -> None:
+        data = self._read_data()
+        data["bookings"].append(booking)
+        self._write_data(data)
+        logger.info(f"New booking added: {booking.get('id', 'unknown')}")
