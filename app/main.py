@@ -1,6 +1,5 @@
 from fastapi import FastAPI
-
-
+from app.api.routes import car_routes, booking_routes
 
 app = FastAPI(
     title="Car Rental API",
@@ -9,6 +8,9 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc"
 )
+
+app.include_router(car_routes.router)
+app.include_router(booking_routes.router)
 
 
 @app.get("/")
