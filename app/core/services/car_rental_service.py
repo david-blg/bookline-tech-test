@@ -104,14 +104,10 @@ class CarRentalService:
             if not isinstance(booking, dict):
                 logger.error(f"Invalid booking data: {booking}, type: {type(booking)}")
                 continue
-                
+            
             if booking['car_id'] == str(car_id):
-                existing_start = date.fromisoformat(
-                    booking['start_date']
-                ) if isinstance(booking['start_date'], str) else booking['start_date']
-                existing_end = date.fromisoformat(
-                    booking['end_date']
-                ) if isinstance(booking['end_date'], str) else booking['end_date']
+                existing_start = date.fromisoformat(booking['start_date']) if isinstance(booking['start_date'], str) else booking['start_date']
+                existing_end = date.fromisoformat(booking['end_date']) if isinstance(booking['end_date'], str) else booking['end_date']
                 
                 if not (end_date < existing_start or start_date > existing_end):
                     logger.info(f"Car {car_id} is already booked from {existing_start} to {existing_end}")
