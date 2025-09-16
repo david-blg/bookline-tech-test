@@ -3,6 +3,8 @@ from app.core.services.car_rental_service import CarRentalService
 from app.infra.db import JSONDatabase
 from app.core.logger.setup_logger import logger
 from datetime import date
+from app.core.exceptions import InvalidDateRangeError
+
 
 router = APIRouter(prefix="/cars", tags=["cars"])
 
@@ -43,12 +45,17 @@ def list_available_cars(
     try:
         logger.info(f"API request: List available cars for date: {target_date}")
         available_cars = car_service.get_available_cars_for_date(target_date)
-        logger.info(f"API response: Retrieved {len(available_cars)} available cars for {target_date}")
-        return {
+        response = {
             "status": "success",
             "data": available_cars,
             "total_count": len(available_cars)
         }
+
+        logger.info(f"API response: Retrieved {len(available_cars)} available cars for {target_date}")
+        return response
+    except InvalidDateRangeError as e:
+        logger.error(f"Invalid date range error: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        logger.error(f"Error listing available cars: {e}")
-        raise HTTPException(status_code=500, detail="Error listing available cars")
+        logger.error(f"Unexpected error in list_available_cars: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
