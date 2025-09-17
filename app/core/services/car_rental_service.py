@@ -2,7 +2,6 @@ from datetime import date, datetime
 from typing import List, Dict
 from uuid import UUID, uuid4
 from app.core.logger.setup_logger import logger
-from app.infra.db import JSONDatabase
 from app.core.models.car_model import CarStatus
 from app.core.exceptions import InvalidDateRangeError, CarNotAvailableError
 from app.core.models.booking_model import BookingRequest

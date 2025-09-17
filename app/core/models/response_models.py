@@ -1,19 +1,16 @@
 from pydantic import BaseModel
-from typing import Dict, Generic, Optional, TypeVar
+from typing import List, Dict
 
-T = TypeVar('T')
+class CarsListResponse(BaseModel):
+    """Response for list of cars"""
+    status: str = "success"
+    message: str = "Cars retrieved successfully"
+    data: List[Dict]
+    total_count: int
 
-class BaseResponse(BaseModel):
-    """Base response model"""
-    status: str
-    message: str
-
-class SuccessResponse(BaseResponse, Generic[T]):
-    """Success response model"""
-    data: T
-    total_count: Optional[int] = None
-
-class ErrorResponse(BaseResponse):
-    """Error response model"""
-    error_code: str
-    details: Optional[Dict[str, str]] = None
+class AvailableCarsResponse(BaseModel):
+    """Response for available cars"""
+    status: str = "success"
+    message: str = "Available cars retrieved successfully"
+    data: List[Dict]
+    total_count: int
