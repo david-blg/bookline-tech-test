@@ -27,12 +27,15 @@ def get_all_cars(car_use_case: CarUseCases = Depends(get_car_use_cases)):
         return response
     except Exception as e:
         logger.error(f"Unexpected error in get_all_cars: {e}")
+        error_response = ErrorResponse(
+            error_code="CARS_RETRIEVAL_ERROR",
+            message="Error retrieving cars",
+            status_code=500,
+            status="failed"
+        )
         raise HTTPException(
-            status_code=500, 
-            detail=ErrorResponse(
-                error_code="CARS_RETRIEVAL_ERROR",
-                message="Error retrieving cars"
-            )
+            status_code=error_response.status_code, 
+            detail=error_response.model_dump()
         )
 
 
