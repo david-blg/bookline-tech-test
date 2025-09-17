@@ -3,8 +3,9 @@ from app.core.dependencies import get_car_use_cases
 from app.core.logger.setup_logger import logger
 from datetime import date
 from app.core.exceptions import InvalidDateRangeError
-from app.core.models.response_models import CarsListResponse, AvailableCarsResponse, ErrorResponse
+from app.core.models.response_models import ErrorResponse
 from app.core.use_cases.car_use_cases import CarUseCases
+from app.core.models.car_model import CarsListResponse, AvailableCarsResponse
 
 router = APIRouter(prefix="/cars", tags=["cars"])
 

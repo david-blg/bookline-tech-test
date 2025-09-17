@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List, Optional, Dict
 from uuid import UUID
 from datetime import date
 
@@ -7,11 +7,11 @@ class ICarRepository(ABC):
     """Interface for car data access operations"""
     
     @abstractmethod
-    def get_all(self) -> List[dict]:
+    def get_all(self) -> List[Dict]:
         pass
     
     @abstractmethod
-    def get_by_id(self, car_id: UUID) -> Optional[dict]:
+    def get_by_id(self, car_id: UUID) -> Optional[Dict]:
         pass
     
     @abstractmethod
@@ -22,13 +22,17 @@ class IBookingRepository(ABC):
     """Interface for booking data access operations"""
     
     @abstractmethod
-    def get_all(self) -> List[dict]:
+    def get_all(self) -> List[Dict]:
         pass
     
     @abstractmethod
-    def create(self, booking_data: dict) -> dict:
+    def create(self, booking_data: Dict) -> Dict:
         pass
     
     @abstractmethod
-    def get_by_date(self, target_date: date) -> List[dict]:
+    def get_by_date(self, target_date: date) -> List[Dict]:
+        pass
+    
+    @abstractmethod
+    def get_by_car_id(self, car_id: UUID) -> List[Dict]:
         pass

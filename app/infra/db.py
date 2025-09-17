@@ -84,7 +84,7 @@ class JSONDatabase:
         data = self._read_data()
         data["bookings"].append(booking)
         self._write_data(data)
-        logger.info(f"New booking added: {booking.get('id', 'unknown')}")
+        logger.info(f"New booking added: {booking['id']}")
 
 
     def set_status_car(self, car_id: UUID, status: CarStatus) -> None:

@@ -32,5 +32,12 @@ class JSONBookingRepository(IBookingRepository):
         all_bookings = self.get_all()
         return [
             booking for booking in all_bookings
-            if booking['start_date'] <= target_date.isoformat() <= booking['end_date']
+            if self._parse_date_to_str(booking['start_date']) <= self._parse_date_to_str(target_date) <= self._parse_date_to_str(booking['end_date'])
         ]
+
+    def get_by_car_id(self, car_id: UUID) -> List[dict]:
+        all_bookings = self.get_all()
+        return [booking for booking in all_bookings if booking['car_id'] == car_id]
+
+    def _parse_date_to_str(self, date: date) -> str:
+        return date.isoformat()
