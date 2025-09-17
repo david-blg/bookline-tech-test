@@ -1,24 +1,18 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.core.logger.setup_logger import logger
-from app.core.services.car_rental_service import CarRentalService
-from app.infra.db import JSONDatabase
+from app.core.dependencies import get_booking_use_cases
 from app.core.models.booking_model import BookingRequest
 from app.core.exceptions import CarNotAvailableError, InvalidDateRangeError
+from app.core.use_cases.booking_use_cases import BookingUseCases
 
 router = APIRouter(prefix="/bookings", tags=["bookings"])
 
-def get_database():
-    return JSONDatabase()
-
-def get_car_service(db: JSONDatabase = Depends(get_database)):
-    return CarRentalService(db)
-
 @router.get("/")
-def get_bookings(service: CarRentalService = Depends(get_car_service)):
+def get_bookings(bookings_use_cases: BookingUseCases = Depends(get_booking_use_cases)):
     """Get all bookings in the system."""
     try:
         logger.info("API request: Get all bookings")
-        bookings = service.get_all_bookings()
+        bookings = bookings_use_cases.get_all_bookings()
         logger.info(f"API response: Retrieved {len(bookings)} bookings")
         response = {
             "bookings": bookings,
@@ -33,12 +27,12 @@ def get_bookings(service: CarRentalService = Depends(get_car_service)):
 @router.post("/")
 def create_booking(
     booking_req: BookingRequest,
-    service: CarRentalService = Depends(get_car_service)
+    booking_use_cases: BookingUseCases = Depends(get_booking_use_cases)
     ):
     """Create a new booking."""
     try:
         logger.info("API request: Create booking")
-        booking = service.create_booking(booking_req)
+        booking = booking_use_cases.create_booking(booking_req)
         logger.info(f"API response: Created booking {booking['id']}")
         return {
             "status": "success",
