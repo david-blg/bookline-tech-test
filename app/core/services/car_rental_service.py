@@ -6,30 +6,33 @@ from app.infra.db import JSONDatabase
 from app.core.models.car_model import CarStatus
 from app.core.exceptions import InvalidDateRangeError, CarNotAvailableError
 from app.core.models.booking_model import BookingRequest
+from app.core.interfaces.repositories import ICarRepository, IBookingRepository
 
 
 class CarRentalService:
     """Service for car rental"""
 
-    def __init__(self, db: JSONDatabase):
-        self.db = db
+    def __init__(self, car_repo: ICarRepository, booking_repo: IBookingRepository):
+        # self.db = db
+        self.car_repo = car_repo
+        self.booking_repo = booking_repo
 
     def get_all_cars(self) -> List[Dict]:
         logger.info("Getting all cars")
-        cars = self.db.get_all_cars()
+        cars = self.car_repo.get_all()
         logger.info(f"Found {len(cars)} cars")
         return cars
 
     def get_all_bookings(self) -> List[Dict]:
         logger.info("Getting all bookings")
-        bookings = self.db.get_all_bookings()
+        bookings = self.booking_repo.get_all()
         logger.info(f"Found {len(bookings)} bookings")
         return bookings
 
 
     def is_car_available(self, car_id: UUID) -> bool:
         logger.info(f"Checking availability for car {car_id}")
-        car = self.db.get_car_by_id(car_id)
+        car = self.car_repo.get_by_id(car_id)
         if not car:
             logger.info(f"Car {car_id} not found")
             return False
@@ -49,8 +52,8 @@ class CarRentalService:
             logger.error(f"Attempted to query availability for past date: {target_date}")
             raise InvalidDateRangeError("Cannot check availability for past dates")
 
-        all_cars = self.get_all_cars()
-        all_bookings = self.get_all_bookings()
+        all_cars = self.car_repo.get_all()
+        all_bookings = self.booking_repo.get_all()
 
         available_cars = []
         for car in all_cars:
@@ -147,11 +150,11 @@ class CarRentalService:
                 'created_at': created_at.isoformat()  
             }
             
-            self.db.add_booking(booking_data)
+            self.booking_repo.create(booking_data)
             
             logger.info(f"Booking created successfully with ID: {booking_data['id']}")
 
-            self.db.set_status_car(booking_request.car_id, CarStatus.RESERVED)
+            self.car_repo.update_status(booking_request.car_id, CarStatus.RESERVED)
             return booking_data
             
         except (CarNotAvailableError, InvalidDateRangeError) as e:
