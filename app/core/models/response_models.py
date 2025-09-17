@@ -1,16 +1,24 @@
 from pydantic import BaseModel
-from typing import List, Dict
+from typing import List
+from app.core.models.car_model import Car
 
-class CarsListResponse(BaseModel):
-    """Response for list of cars"""
+class BaseResponse(BaseModel):
+    """Base response model"""
     status: str = "success"
-    message: str = "Cars retrieved successfully"
-    data: List[Dict]
+    message: str = "Operation successful"
+
+class ErrorResponse(BaseResponse):
+    """Error response model"""
+    error_code: str
+    message: str = "Operation failed"
+    status_code: int = 500
+    
+class CarsListResponse(BaseResponse):
+    """Response for list of cars"""
+    data: List[Car]
     total_count: int
 
-class AvailableCarsResponse(BaseModel):
+class AvailableCarsResponse(BaseResponse):
     """Response for available cars"""
-    status: str = "success"
-    message: str = "Available cars retrieved successfully"
-    data: List[Dict]
+    data: List[Car]
     total_count: int

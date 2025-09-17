@@ -1,6 +1,7 @@
 from app.infra.db import JSONDatabase
 from app.core.repositories.json_repositories import JSONCarRepository, JSONBookingRepository
 from app.core.services.car_rental_service import CarRentalService
+from app.core.use_cases.car_use_cases import CarUseCases
 from fastapi import Depends
 
 def get_json_database():
@@ -21,3 +22,10 @@ def get_car_rental_service(
 ):
     """Dependency for car rental service"""
     return CarRentalService(car_repo, booking_repo)
+
+def get_car_use_cases(
+    car_repo: JSONCarRepository = Depends(get_car_repository),
+    booking_repo: JSONBookingRepository = Depends(get_booking_repository)
+):
+    """Dependency for car use cases"""
+    return CarUseCases(car_repo, booking_repo)
