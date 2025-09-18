@@ -5,6 +5,7 @@ from typing import Dict, List, Any
 from uuid import uuid4, UUID
 from app.core.models.car_model import CarStatus
 
+
 class JSONDatabase:
     def __init__(self, file_path: str = "app/data/db.json"):
         self.file_path = Path(file_path)
@@ -23,7 +24,7 @@ class JSONDatabase:
                         "engine": "JZX100 1JZ-GTE",
                         "version": "Tourer V",
                         "year": "1998",
-                        "status": CarStatus.AVAILABLE
+                        "status": CarStatus.AVAILABLE,
                     },
                     {
                         "id": uuid4(),
@@ -32,7 +33,7 @@ class JSONDatabase:
                         "engine": "2JZ-GTE",
                         "version": "MK4",
                         "year": "1996",
-                        "status": CarStatus.AVAILABLE
+                        "status": CarStatus.AVAILABLE,
                     },
                     {
                         "id": uuid4(),
@@ -41,17 +42,98 @@ class JSONDatabase:
                         "engine": "S54B32",
                         "version": "E46",
                         "year": 2003,
-                        "status": CarStatus.MAINTENANCE
-                    }
+                        "status": CarStatus.MAINTENANCE,
+                    },
+                    {
+                        "id": uuid4(),
+                        "brand": "Nissan",
+                        "model": "Skyline GT-R",
+                        "engine": "RB26DETT",
+                        "version": "R34",
+                        "year": "1999",
+                        "status": CarStatus.RESERVED,
+                    },
+                    {
+                        "id": uuid4(),
+                        "brand": "Mazda",
+                        "model": "RX-7",
+                        "engine": "13B-REW",
+                        "version": "FD3S",
+                        "year": "1998",
+                        "status": CarStatus.AVAILABLE,
+                    },
+                    {
+                        "id": uuid4(),
+                        "brand": "Honda",
+                        "model": "NSX",
+                        "engine": "C30A",
+                        "version": "Type R",
+                        "year": "1992",
+                        "status": CarStatus.MAINTENANCE,
+                    },
+                    {
+                        "id": uuid4(),
+                        "brand": "Subaru",
+                        "model": "Impreza WRX STI",
+                        "engine": "EJ207",
+                        "version": "GDBC",
+                        "year": "2005",
+                        "status": CarStatus.AVAILABLE,
+                    },
+                    {
+                        "id": uuid4(),
+                        "brand": "Mitsubishi",
+                        "model": "Lancer Evolution",
+                        "engine": "4G63T",
+                        "version": "IX",
+                        "year": "2005",
+                        "status": CarStatus.RESERVED,
+                    },
+                    {
+                        "id": uuid4(),
+                        "brand": "Nissan",
+                        "model": "Silvia",
+                        "engine": "SR20DET",
+                        "version": "S15",
+                        "year": "1999",
+                        "status": CarStatus.AVAILABLE,
+                    },
+                    {
+                        "id": uuid4(),
+                        "brand": "Toyota",
+                        "model": "MR2",
+                        "engine": "3S-GTE",
+                        "version": "SW20",
+                        "year": "1993",
+                        "status": CarStatus.MAINTENANCE,
+                    },
+                    {
+                        "id": uuid4(),
+                        "brand": "Honda",
+                        "model": "Civic Type R",
+                        "engine": "K20A",
+                        "version": "EP3",
+                        "year": "2004",
+                        "status": CarStatus.AVAILABLE,
+                    },
+                    {
+                        "id": uuid4(),
+                        "brand": "Nissan",
+                        "model": "350Z",
+                        "engine": "VQ35DE",
+                        "version": "Z33",
+                        "year": "2005",
+                        "status": CarStatus.AVAILABLE,
+                    },
                 ],
-                "bookings": []
+                "bookings": [],
             }
             self._write_data(initial_data)
             logger.info(f"Created new database file at {self.file_path}")
 
     def _read_data(self) -> Dict[str, List[Any]]:
         try:
-            with open(self.file_path, 'r') as file:
+            with open(self.file_path, "r") as file:
                 return json.load(file)
         except (FileNotFoundError, json.JSONDecodeError) as e:
             logger.error(f"Error reading database file: {e}. Returning empty data.")
@@ -59,7 +141,7 @@ class JSONDatabase:
 
     def _write_data(self, data: Dict[str, List[Any]]):
         try:
-            with open(self.file_path, 'w') as file:
+            with open(self.file_path, "w") as file:
                 json.dump(data, file, indent=4, default=str)
         except Exception as e:
             logger.error(f"Error writing to database file: {e}")
@@ -68,14 +150,14 @@ class JSONDatabase:
     def get_all_cars(self) -> List[Dict]:
         data = self._read_data()
         return data.get("cars", [])
-    
+
     def get_car_by_id(self, car_id: UUID) -> Dict:
         data = self._read_data()
         for car in data.get("cars", []):
-            if car['id'] == str(car_id):
+            if car["id"] == str(car_id):
                 return car
         return None
-    
+
     def get_all_bookings(self) -> List[Dict]:
         data = self._read_data()
         return data.get("bookings", [])
@@ -86,12 +168,11 @@ class JSONDatabase:
         self._write_data(data)
         logger.info(f"New booking added: {booking['id']}")
 
-
     def set_status_car(self, car_id: UUID, status: CarStatus) -> None:
         data = self._read_data()
         for car in data.get("cars", []):
-            if car['id'] == str(car_id):
-                car['status'] = status.value
+            if car["id"] == str(car_id):
+                car["status"] = status.value
                 self._write_data(data)
                 logger.info(f"Car {car_id} status updated to {status.value}")
                 return

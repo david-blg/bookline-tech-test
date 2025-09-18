@@ -22,7 +22,7 @@ class CarUseCases:
         
         all_cars = self.car_repo.get_all()
         bookings = self.booking_repo.get_all()
-        
+         
         booked_car_ids = {booking['car_id'] for booking in bookings}
         
         available_cars = [
