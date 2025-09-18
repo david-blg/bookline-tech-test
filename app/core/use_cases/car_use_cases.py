@@ -12,7 +12,7 @@ class CarUseCases:
         self.booking_repo = booking_repo
 
     def get_all_cars(self) -> List[Dict]:
-        return self.car_repo.get_all()
+        return[car for car in self.car_repo.get_all() if car['status'] == CarStatus.AVAILABLE] 
 
     def get_available_cars(self, target_date: date):
         logger.info(f"Getting available cars for {target_date}")

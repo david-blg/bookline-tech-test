@@ -41,7 +41,7 @@ def get_bookings(bookings_use_cases: BookingUseCases = Depends(get_booking_use_c
 def create_booking(
     booking_req: BookingRequest,
     booking_use_cases: BookingUseCases = Depends(get_booking_use_cases)
-    ):
+):
     """Create a new booking."""
     try:
         logger.info("API request: Create booking")

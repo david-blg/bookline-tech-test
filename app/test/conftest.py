@@ -35,7 +35,7 @@ def test_db():
                     "engine": "2JZ-GTE",
                     "version": "MK4",
                     "year": "1996",
-                    "status": "reserved"
+                    "status": "available"
                 }
             ],
             "bookings": []
