@@ -1,0 +1,19 @@
+2025-09-18 11:04:09,167 - car_rental_api - INFO - Created new database file at app\data\db.json
+2025-09-18 11:04:09,170 - car_rental_api - INFO - API request: Get all cars
+2025-09-18 11:04:09,187 - car_rental_api - INFO - API response: Retrieved 7 cars
+2025-09-18 11:04:39,651 - car_rental_api - INFO - API request: List available cars for date: 2025-09-18
+2025-09-18 11:04:39,651 - car_rental_api - INFO - Getting available cars for 2025-09-18
+2025-09-18 11:04:39,652 - car_rental_api - INFO - API response: Retrieved 7 available cars for 2025-09-18
+2025-09-18 11:05:00,949 - car_rental_api - INFO - API request: Get all bookings
+2025-09-18 11:05:00,949 - car_rental_api - INFO - API response: Retrieved 0 bookings
+2025-09-18 11:05:18,880 - car_rental_api - INFO - API request: Create booking
+2025-09-18 11:05:18,880 - car_rental_api - INFO - Starting booking creation for car 9dde1cbf-a0e7-4599-a178-f506beed0764 from 2025-09-18 to 2025-09-18
+2025-09-18 11:05:18,880 - car_rental_api - INFO - Car 9dde1cbf-a0e7-4599-a178-f506beed0764 status validation passed
+2025-09-18 11:05:18,880 - car_rental_api - INFO - Booking date validation passed
+2025-09-18 11:05:18,880 - car_rental_api - INFO - Car availability for dates validation passed
+2025-09-18 11:05:18,880 - car_rental_api - INFO - Creating booking with ID: a72d006e-883b-4d38-ae2c-f8f5405ae48b
+2025-09-18 11:05:18,883 - car_rental_api - INFO - New booking added: a72d006e-883b-4d38-ae2c-f8f5405ae48b
+2025-09-18 11:05:18,896 - car_rental_api - INFO - Car 9dde1cbf-a0e7-4599-a178-f506beed0764 status updated to reserved
+2025-09-18 11:05:18,896 - car_rental_api - INFO - Car 9dde1cbf-a0e7-4599-a178-f506beed0764 status updated to CarStatus.RESERVED
+2025-09-18 11:05:18,896 - car_rental_api - INFO - Booking a72d006e-883b-4d38-ae2c-f8f5405ae48b created successfully for car 9dde1cbf-a0e7-4599-a178-f506beed0764 from 2025-09-18 to 2025-09-18
+2025-09-18 11:05:18,896 - car_rental_api - INFO - API response: Created booking a72d006e-883b-4d38-ae2c-f8f5405ae48b

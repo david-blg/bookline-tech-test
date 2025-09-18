@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.core.logger.setup_logger import logger
 from app.core.dependencies import get_booking_use_cases
-from app.core.models.booking_model import BookingRequest, ListBookingsResponse
+from app.core.models.booking_model import BookingRequest, ListBookingsResponse, BookingResponse
 from app.core.exceptions import CarNotAvailableError, InvalidDateRangeError
 from app.core.use_cases.booking_use_cases import BookingUseCases
 from app.core.models.response_models import ErrorResponse
 
 router = APIRouter(prefix="/bookings", tags=["bookings"])
 
-@router.get("/")
+@router.get("/", response_model=ListBookingsResponse)
 def get_bookings(bookings_use_cases: BookingUseCases = Depends(get_booking_use_cases)):
     """Get all bookings in the system."""
     try:
@@ -37,7 +37,7 @@ def get_bookings(bookings_use_cases: BookingUseCases = Depends(get_booking_use_c
         )
 
 
-@router.post("/")
+@router.post("/", response_model=BookingResponse)
 def create_booking(
     booking_req: BookingRequest,
     booking_use_cases: BookingUseCases = Depends(get_booking_use_cases)
@@ -48,11 +48,12 @@ def create_booking(
         booking = booking_use_cases.create_booking(booking_req)
         logger.info(f"API response: Created booking {booking['id']}")
 
-        return {
-            "status": "success",
-            "data": booking,
-            "message": "Booking created successfully"
-        }
+        response = BookingResponse(
+            status="success",
+            data=booking,
+            message="Booking created successfully"
+        )
+        return response
     except (CarNotAvailableError, InvalidDateRangeError) as e:
         logger.error(f"Booking creation failed: {e}")
 

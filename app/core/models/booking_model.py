@@ -25,3 +25,8 @@ class ListBookingsResponse(BaseResponse):
     """List bookings response model."""
     data: List[Booking]
     total_count: int
+
+
+class BookingResponse(BaseResponse):
+    """Booking response model."""
+    data: Booking
